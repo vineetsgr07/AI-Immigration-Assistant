@@ -13,7 +13,7 @@ const LandingPage: React.FC = () => {
         <Layout showBackButton={!!selectedBot} onBack={() => setSelectedBot(null)}>
             {selectedBot ? (
                 <div className="w-full h-full">
-                    <ChatInterface botType={selectedBot} />
+                    <ChatInterface botType={selectedBot as any} />
                 </div>
             ) : (
                 <div className="container mx-auto px-4 py-8 ">

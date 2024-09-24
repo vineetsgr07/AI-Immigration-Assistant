@@ -3,52 +3,13 @@
 "use client";
 
 import React, { createContext, useContext, useReducer, ReactNode, useEffect, Dispatch } from 'react';
-
-export interface Message {
-  id: string;
-  text: string;
-  sender: 'user' | 'bot';
-  timestamp: string; // Change this to string for easier serialization
-}
-
-export interface Card {
-  id: string;
-  title: string;
-  content: string;
-}
-
-interface ChatState {
-  immigrationMessages: Message[];
-  generalMessages: Message[];
-  immigrationCards: Card[];
-  generalCards: Card[];
-  isLoading: boolean;
-  error: string | null;
-  activeContext: 'immigration' | 'general';
-}
-
-type ChatAction =
-  | { type: 'ADD_MESSAGE'; payload: { message: Message; context: 'immigration' | 'general' } }
-  | { type: 'ADD_CARD'; payload: { card: Card; context: 'immigration' | 'general' } }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'CLEAR_CHAT'; payload: 'immigration' | 'general' }
-  | { type: 'SET_ACTIVE_CONTEXT'; payload: 'immigration' | 'general' }
-  | { type: 'LOAD_STATE'; payload: ChatState };
-
-const initialState: ChatState = {
-  immigrationMessages: [],
-  generalMessages: [],
-  immigrationCards: [],
-  generalCards: [],
-  isLoading: false,
-  error: null,
-  activeContext: 'immigration',
-};
+import { ChatState, ChatAction } from '@/types/chat';
+import { initialState } from '@/utils/chat-helper';
+import { ActionType } from '@/constant/chat';
 
 const chatReducer = (state: ChatState, action: ChatAction): ChatState => {
   switch (action.type) {
-    case 'ADD_MESSAGE':
+    case ActionType.ADD_MESSAGE:
       return {
         ...state,
         [`${action.payload.context}Messages`]: [
@@ -56,7 +17,7 @@ const chatReducer = (state: ChatState, action: ChatAction): ChatState => {
           action.payload.message,
         ],
       };
-    case 'ADD_CARD':
+    case ActionType.ADD_CARD:
       return {
         ...state,
         [`${action.payload.context}Cards`]: [
@@ -64,19 +25,19 @@ const chatReducer = (state: ChatState, action: ChatAction): ChatState => {
           action.payload.card,
         ],
       };
-    case 'SET_LOADING':
+    case ActionType.SET_LOADING:
       return { ...state, isLoading: action.payload };
-    case 'SET_ERROR':
+    case ActionType.SET_ERROR:
       return { ...state, error: action.payload };
-    case 'CLEAR_CHAT':
+    case ActionType.CLEAR_CHAT:
       return {
         ...state,
         [`${action.payload}Messages`]: [],
         [`${action.payload}Cards`]: [],
       };
-    case 'SET_ACTIVE_CONTEXT':
+    case ActionType.SET_ACTIVE_CONTEXT:
       return { ...state, activeContext: action.payload };
-    case 'LOAD_STATE':
+    case ActionType.LOAD_STATE:
       return action.payload;
     default:
       return state;

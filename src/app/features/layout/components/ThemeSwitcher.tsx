@@ -13,7 +13,11 @@ const ThemeSwitcher = () => {
       className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
       aria-label="Toggle theme"
     >
-      {theme === 'light' ? <FaMoon className="text-gray-800" /> : <FaSun className="text-yellow-400" />}
+      {theme === 'light' ? (
+        <FaMoon className="text-gray-800" />
+      ) : (
+        <FaSun className="text-yellow-300" /> // Changed from text-yellow-400 to text-yellow-300
+      )}
     </button>
   );
 };

@@ -1,3 +1,4 @@
+import React from 'react';
 import './globals.css';
 import { ChatProvider } from '../contexts/ChatContext';
 import { ThemeProvider } from '../contexts/ThemeContext';

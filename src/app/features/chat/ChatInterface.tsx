@@ -1,18 +1,17 @@
-// src/components/ChatInterface.tsx
-
 "use client";
 
 import React, { useCallback, useRef, useEffect } from 'react';
-import { useChatContext, Message, Card } from '@/contexts/ChatContext';
+import { useChatContext } from '@/contexts/ChatContext';
 import MessageBubble from './MessageBubble';
 import CardComponent from '@/components/CardComponent';
 import UserInput from './UserInput';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
+import { Message, Card, ChatInterfaceProps } from '@/types/chat';
+import { ActionType, CONTEXTS } from '@/constant/chat';
 
-interface ChatInterfaceProps {
-  botType: 'immigration' | 'general';
-}
+const { ADD_MESSAGE, ADD_CARD, SET_LOADING, SET_ERROR, CLEAR_CHAT, SET_ACTIVE_CONTEXT, LOAD_STATE } = ActionType;
+
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ botType }) => {
   const { state, dispatch } = useChatContext();
@@ -25,7 +24,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ botType }) => {
   }, [immigrationMessages, generalMessages]);
 
   useEffect(() => {
-    dispatch({ type: 'SET_ACTIVE_CONTEXT', payload: botType });
+    dispatch({ type: SET_ACTIVE_CONTEXT, payload: botType });
   }, [botType, dispatch]);
 
   const handleSendMessage = useCallback(async (text: string) => {
@@ -35,8 +34,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ botType }) => {
       sender: 'user',
       timestamp: new Date().toISOString(),
     };
-    dispatch({ type: 'ADD_MESSAGE', payload: { message: newMessage, context: activeContext } });
-    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch({ type: ADD_MESSAGE, payload: { message: newMessage, context: activeContext } });
+    dispatch({ type: SET_LOADING, payload: true });
 
     try {
       const response = await fetch('/api/chat', {
@@ -66,27 +65,26 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ botType }) => {
         sender: 'bot',
         timestamp: new Date().toISOString(),
       };
-      dispatch({ type: 'ADD_MESSAGE', payload: { message: botMessage, context: activeContext } });
+      dispatch({ type: ADD_MESSAGE, payload: { message: botMessage, context: activeContext } });
 
-      // Example of adding a card (you would need to implement logic to determine when to add cards)
       if (data.card) {
         const newCard: Card = {
           id: Date.now().toString(),
           title: data.card.title,
           content: data.card.content,
         };
-        dispatch({ type: 'ADD_CARD', payload: { card: newCard, context: activeContext } });
+        dispatch({ type: ADD_CARD, payload: { card: newCard, context: activeContext } });
       }
     } catch (error) {
       console.error('Error:', error);
-      dispatch({ type: 'SET_ERROR', payload: 'Sorry, there was an error processing your request.' });
+      dispatch({ type: SET_ERROR, payload: 'Sorry, there was an error processing your request.' });
     } finally {
-      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch({ type: SET_LOADING, payload: false });
     }
   }, [activeContext, immigrationMessages, generalMessages, dispatch]);
 
-  const messages = activeContext === 'immigration' ? immigrationMessages : generalMessages;
-  const cards = activeContext === 'immigration' ? immigrationCards : generalCards;
+  const messages = activeContext === CONTEXTS.IMMIGRATION ? immigrationMessages : generalMessages;
+  const cards = activeContext === CONTEXTS.IMMIGRATION ? immigrationCards : generalCards;
 
   return (
     <div className="flex flex-col h-full w-full">

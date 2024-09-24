@@ -16,6 +16,7 @@ const Header: React.FC<HeaderProps> = ({ showBackButton, onBack }) => {
             <button
               onClick={onBack}
               className="mr-4 text-beacon-dark dark:text-beacon-white hover:text-beacon-primary dark:hover:text-beacon-primary-light transition-colors duration-200"
+              aria-label="Go back"
             >
               <FaArrowLeft />
             </button>

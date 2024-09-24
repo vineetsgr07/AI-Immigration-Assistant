@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';

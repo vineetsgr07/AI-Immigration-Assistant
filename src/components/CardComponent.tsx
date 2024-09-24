@@ -1,4 +1,5 @@
 // src/components/CardComponent.tsx
+"use client";
 
 import React from 'react';
 import { Card as CardType } from '../types/chat'; 

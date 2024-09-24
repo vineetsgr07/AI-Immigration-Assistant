@@ -6,32 +6,49 @@ import Hero from '@/app/features/landing/components/Hero';
 import Card from '@/app/features/landing/components/Card';
 import ChatInterface from '@/app/features/chat/components/ChatInterface';
 
+const HERO_TITLE = "Simplify Your Path to a New Life in Canada";
+const HERO_SUBTITLE = "Use our AI-powered assistant to get accurate and up-to-date information about immigration processes.";
+
+const CARDS = [
+    {
+        title: 'Immigration Assistant',
+        description: "Get assistance with immigration processes, visa options, and eligibility criteria.",
+        type: 'immigration',
+    },
+    {
+        title: "General Information",
+        description: "Ask any general questions about life in Canada, culture, and more.",
+        type: 'general',
+    }
+] as const;
+
+type BotType = typeof CARDS[number]['type'];
+
 const LandingPage: React.FC = () => {
-    const [selectedBot, setSelectedBot] = useState<string | null>(null);
+    const [selectedBot, setSelectedBot] = useState<BotType | null>(null);
 
     return (
         <Layout showBackButton={!!selectedBot} onBack={() => setSelectedBot(null)}>
             {selectedBot ? (
                 <div className="w-full h-full">
-                    <ChatInterface botType={selectedBot as any} />
+                    <ChatInterface botType={selectedBot} />
                 </div>
             ) : (
-                <div className="container mx-auto px-4 py-8 ">
+                <div className="container mx-auto px-4 py-8">
                     <Hero
-                        title="Simplify Your Path to a New Life in Canada"
-                        subtitle="Use our AI-powered assistant to get accurate and up-to-date information about immigration processes."
+                        title={HERO_TITLE}
+                        subtitle={HERO_SUBTITLE}
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                        <Card
-                            onClick={() => setSelectedBot('immigration')}
-                            title="Immigration Assistant"
-                            description="Get assistance with immigration processes, visa options, and eligibility criteria."
-                        />
-                        <Card
-                            onClick={() => setSelectedBot('general')}
-                            title="General Information"
-                            description="Ask any general questions about life in Canada, culture, and more."
-                        />
+                        {CARDS.map((card) => (
+                            <Card
+                                key={card.type}
+                                onClick={() => setSelectedBot(card.type)}
+                                title={card.title}
+                                description={card.description}
+                                type={card.type}
+                            />
+                        ))}
                     </div>
                 </div>
             )}

@@ -1,10 +1,10 @@
 // src/components/CardComponent.tsx
 
 import React from 'react';
-import { Card } from '../contexts/ChatContext';
+import { Card as CardType } from '../types/chat'; 
 
 interface CardComponentProps {
-  card: Card;
+  card: CardType;
 }
 
 const CardComponent: React.FC<CardComponentProps> = ({ card }) => {

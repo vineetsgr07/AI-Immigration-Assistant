@@ -4,16 +4,19 @@ import { v4 as uuidv4 } from 'uuid';
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
 
+const allowedTopics = ['visa types', 'application processes', 'common faqs', 'immigration', 'visa', 'application', 'faq', 'immigration'];
+
 export async function POST(request: Request) {
   try {
     const { messages, botType } = await request.json();
+    const userMessage = messages[messages.length - 1].parts[0].text;
 
-    // Fun bot personalities
-    const botPersonalities = {
-      'general': 'a witty comedian',
-      'immigration': 'a friendly immigration expert with a penchant for travel puns',
-      // Add more personalities as needed
-    };
+    if (!isRelevantQuery(userMessage)) {
+      return NextResponse.json({
+        content: "I'm sorry, but I can only answer questions related to visa types, application processes, and common FAQs about immigration. Could you please rephrase your question to focus on these topics?",
+        responseId: uuidv4(),
+      });
+    }
 
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
@@ -24,45 +27,34 @@ export async function POST(request: Request) {
       },
     });
 
-    // Add personality to the prompt
-    const personalityPrompt = `You are ${botPersonalities[botType as keyof typeof botPersonalities] || 'a helpful assistant'}. Respond in a fun and engaging way.`;
-    const userMessage = messages[messages.length - 1].parts[0].text;
-    const fullPrompt = `${personalityPrompt}\n\nUser: ${userMessage}`;
+    const personalityPrompt = generateImmigrationResponse(userMessage);
 
-    const result = await chat.sendMessage(fullPrompt);
+    const result = await chat.sendMessage(personalityPrompt);
     const response = result.response;
 
-    // Format the response with some flair
-    const formattedResponse = response.text()
-      .replace(/\n/g, '\n\n')
-      .replace(/(!|\?|\.)/g, '$1✨');
-
-    // Generate a fun fact or joke
-    const funFact = await generateFunFact(botType);
+    const formattedResponse = response.text().replace(/\n/g, '\n\n');
 
     return NextResponse.json({
       content: formattedResponse,
-      funFact,
       responseId: uuidv4(),
-      mood: getMood(formattedResponse),
     });
   } catch (error: any) {
-    console.error('Oops! Our AI had a brain freeze:', error);
+    console.error('Error in AI response:', error);
     return NextResponse.json({
-      error: "Looks like our AI ate too much ice cream and got a brain freeze! 🍦🧠 We're warming it up, please try again!",
+      error: "We're sorry, but we couldn't process your request at the moment. Please try again later.",
       errorId: uuidv4(),
     }, { status: 500 });
   }
 }
 
-async function generateFunFact(botType: string): Promise<string> {
-  // You can implement this to generate a relevant fun fact or joke
-  // based on the botType or use another API call
-  return "Did you know? The first computer bug was an actual real-life bug! 🐛💻";
+function isRelevantQuery(query: string): boolean {
+  return allowedTopics.some(topic => query.toLowerCase().includes(topic));
 }
 
-function getMood(response: string): string {
-  // Analyze the response to determine the AI's "mood"
-  const moods = ['excited', 'curious', 'amused', 'thoughtful', 'energetic'];
-  return moods[Math.floor(Math.random() * moods.length)];
+function generateImmigrationResponse(userMessage: string): string {
+  return `As a knowledgeable immigration advisor, provide a helpful and concise response to the following question, focusing only on visa types, application processes, or common FAQs about immigration. Do not provide any information outside of these topics.
+
+User: ${userMessage}
+
+Response:`;
 }

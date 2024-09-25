@@ -92,5 +92,3 @@ This project is licensed under the MIT License. See the `LICENSE` file for more 
 
 ## Considerations
  - Google Gemini AI API is used as it's currently free, replacing the previous OpenAI API due to changes in their pricing model.
-
-### About the chatbot:

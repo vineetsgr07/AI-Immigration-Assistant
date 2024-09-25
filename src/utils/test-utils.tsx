@@ -1,23 +1,21 @@
-import React, { ReactElement } from 'react';
-import { render, RenderOptions } from '@testing-library/react';
+// test-utils.tsx
+import React from 'react';
+import { render as rtlRender } from '@testing-library/react';
 import { ThemeProvider } from '@/contexts/ThemeContext';
-import { ChatProvider } from '@/contexts/ChatContext';
+import { SessionProvider } from "next-auth/react";
 
-const AllTheProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <ThemeProvider>
-      <ChatProvider>
-        {children}
-      </ChatProvider>
-    </ThemeProvider>
-  );
-};
-
-const customRender = (
-  ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>
-) => render(ui, { wrapper: AllTheProviders, ...options });
+function render(ui: React.ReactElement, { session = null, ...renderOptions } = {}) {
+  function Wrapper({ children }: { children: React.ReactNode }) {
+    return (
+      <SessionProvider session={session}>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
+      </SessionProvider>
+    );
+  }
+  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
+}
 
 export * from '@testing-library/react';
-
-export { customRender as render };
+export { render };

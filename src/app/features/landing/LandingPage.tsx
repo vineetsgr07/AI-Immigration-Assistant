@@ -22,13 +22,7 @@ const LandingPage: React.FC = () => {
         }
     }, [status, router]);
 
-    if (status === 'loading') {
-        return <div>Loading...</div>;
-    }
-
-    if (!session) {
-        return null; // This will prevent any flash of content before redirect
-    }
+    if (!session) return null;
 
     const capitalizeFirstLetter = (string: string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -37,29 +31,36 @@ const LandingPage: React.FC = () => {
     const userName = session.user?.name ? capitalizeFirstLetter(session.user.name) : 'User';
 
     return (
-        <Layout showBackButton={!!selectedBot} onBack={() => setSelectedBot(null)}>
+        <Layout showBackButton={!!selectedBot}
+            onBack={() => setSelectedBot(null)}
+            title={selectedBot ? `Chat with ${selectedBot} bot` : "AI Immigration Assistant"}
+        >
             {selectedBot ? (
-                <div className="w-full h-full">
+                <div className="w-full h-full" aria-live="polite">
+                    <h2 className="sr-only">{`Chat with ${selectedBot} bot`}</h2>
                     <ChatInterface botType={selectedBot} />
                 </div>
             ) : (
                 <div className="container mx-auto px-4 py-8">
-                    <h1 className="text-2xl font-bold mb-4">Welcome, {userName}!</h1>
                     <Hero
                         title={LANDING_PAGE_TEXT.HERO_TITLE}
                         subtitle={LANDING_PAGE_TEXT.HERO_SUBTITLE}
                     />
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                        {CARDS.map((card) => (
-                            <Card
-                                key={card.type}
-                                onClick={() => setSelectedBot(card.type)}
-                                title={card.title}
-                                description={card.description}
-                                type={card.type}
-                            />
-                        ))}
-                    </div>
+                    <h1 className="text-xl mb-4 dark:text-white">Welcome, {userName}!</h1>
+                    <section aria-label="Bot selection">
+                        <h2 className="sr-only">Choose a bot to chat with</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                            {CARDS.map((card) => (
+                                <Card
+                                    key={card.type}
+                                    onClick={() => setSelectedBot(card.type)}
+                                    title={card.title}
+                                    description={card.description}
+                                    type={card.type}
+                                />
+                            ))}
+                        </div>
+                    </section>
                 </div>
             )}
         </Layout>

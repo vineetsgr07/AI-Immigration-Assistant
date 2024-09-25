@@ -43,7 +43,7 @@ const UserInput: React.FC<UserInputProps> = React.memo(({ onSendMessage, isLoadi
     }, [handleSubmit]);
 
     return (
-        <form onSubmit={handleSubmit} className="flex items-center space-x-2 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
+        <form onSubmit={handleSubmit} className="flex items-center space-x-2 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg" aria-label="Message input form">
             <input
                 ref={inputRef}
                 type="text"
@@ -54,6 +54,7 @@ const UserInput: React.FC<UserInputProps> = React.memo(({ onSendMessage, isLoadi
                 placeholder="Type your message..."
                 disabled={isLoading}
                 aria-label="Message input"
+                aria-disabled={isLoading}
             />
             {isSpeechSupported && (
                 <motion.button
@@ -62,8 +63,9 @@ const UserInput: React.FC<UserInputProps> = React.memo(({ onSendMessage, isLoadi
                     className={`p-3 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-300 ${isRecording ? 'bg-red-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'}`}
                     {...buttonAnimationProps}
                     aria-label={isRecording ? "Stop recording" : "Start recording"}
+                    aria-pressed={isRecording}
                 >
-                    {isRecording ? <FaMicrophoneSlash /> : <FaMicrophone />}
+                    {isRecording ? <FaMicrophoneSlash aria-hidden="true" /> : <FaMicrophone aria-hidden="true" />}
                 </motion.button>
             )}
             <SendButton isLoading={isLoading} disabled={isLoading || !input.trim()} />

@@ -9,9 +9,10 @@ import ThemeSwitcher from './ThemeSwitcher';
 interface HeaderProps {
   showBackButton: boolean;
   onBack: () => void;
+  title?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ showBackButton, onBack }) => {
+const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, title }) => {
   const router = useRouter();
   const { data: session, status } = useSession();
 
@@ -34,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ showBackButton, onBack }) => {
               <FaArrowLeft />
             </button>
           )}
-          <h1 className="text-2xl font-bold text-beacon-dark dark:text-beacon-white">AI Immigration Assistant</h1>
+          <h1 className="text-2xl font-bold text-beacon-dark dark:text-beacon-white">{title}</h1>
         </div>
         <div className="flex items-center">
           <ThemeSwitcher />

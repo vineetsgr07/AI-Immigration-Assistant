@@ -87,8 +87,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ botType }) => {
   const cards = activeContext === CONTEXTS.IMMIGRATION ? immigrationCards : generalCards;
 
   return (
-    <div className="flex flex-col h-full w-full">
-      <div className="flex-grow overflow-y-auto p-4 bg-beacon-bg dark:bg-gray-900">
+    <div className="flex flex-col h-full w-full" role="main" aria-label="Chat Interface">
+      <div className="flex-grow overflow-y-auto p-4 bg-beacon-bg dark:bg-gray-900" role="log" aria-live="polite" aria-relevant="additions">
         <div className="max-w-3xl mx-auto space-y-4">
           <AnimatePresence>
             {messages.map((message) => (
@@ -107,9 +107,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ botType }) => {
             <CardComponent key={card.id} card={card} />
           ))}
           {error && (
-            <div className="text-red-500 text-center">{error}</div>
+            <div className="text-red-500 text-center" role="alert" aria-live="assertive">{error}</div>
           )}
-          <div ref={messagesEndRef} />
+          <div ref={messagesEndRef} tabIndex={-1} aria-hidden="true" />
         </div>
       </div>
       <div className="w-full bg-white dark:bg-gray-800 border-t">

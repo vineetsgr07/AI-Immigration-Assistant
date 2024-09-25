@@ -31,9 +31,11 @@ const LandingPage: React.FC = () => {
     const userName = session.user?.name ? capitalizeFirstLetter(session.user.name) : 'User';
 
     return (
-        <Layout showBackButton={!!selectedBot}
+        <Layout 
+            showBackButton={!!selectedBot}
             onBack={() => setSelectedBot(null)}
             title={selectedBot ? `Chat with ${selectedBot} bot` : "AI Immigration Assistant"}
+            isChat={!!selectedBot}
         >
             {selectedBot ? (
                 <div className="w-full h-full" aria-live="polite">

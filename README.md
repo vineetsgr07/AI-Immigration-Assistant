@@ -2,9 +2,18 @@
 
 An intelligent chatbot designed to simplify the Canadian immigration process by providing accurate and up-to-date information.
 
+## Login Page
 ![AI Immigration Assistant Screenshot](./images/login.png)
 
+## Landing Page
 ![AI Immigration Assistant Screenshot](./images/screenshot.png)
+
+
+## Chat Page
+![AI Immigration Assistant Screenshot](./images/chatPage.png)
+
+## Theming
+![AI Immigration Assistant Screenshot](./images/theming.png)
 
 [Live Demo](https://ai-immigration-assistant.vercel.app/)
 

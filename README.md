@@ -22,7 +22,7 @@ The chat interface allows users to interact with the AI assistant for immigratio
 ## Theming
 The application supports customizable themes for a personalized user experience.
 
-[Live Demo](https://ai-immigration-assistant.vercel.app/)
+[Live Demo](https://ai-immigration-assistant-zeta.vercel.app/)
 
 ## Key Features
 

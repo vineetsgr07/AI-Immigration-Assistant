@@ -11,13 +11,6 @@ export async function POST(request: Request) {
     const { messages, botType } = await request.json();
     const userMessage = messages[messages.length - 1].parts[0].text;
 
-    if (!isRelevantQuery(userMessage)) {
-      return NextResponse.json({
-        content: "I'm sorry, but I can only answer questions related to visa types, application processes, and common FAQs about immigration. Could you please rephrase your question to focus on these topics?",
-        responseId: uuidv4(),
-      });
-    }
-
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
     const chat = model.startChat({
@@ -47,9 +40,6 @@ export async function POST(request: Request) {
   }
 }
 
-function isRelevantQuery(query: string): boolean {
-  return allowedTopics.some(topic => query.toLowerCase().includes(topic));
-}
 
 function generateImmigrationResponse(userMessage: string): string {
   return `As a knowledgeable immigration advisor, provide a helpful and concise response to the following question, focusing only on visa types, application processes, or common FAQs about immigration. Do not provide any information outside of these topics.

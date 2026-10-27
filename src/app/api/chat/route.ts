@@ -1,15 +1,27 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { v4 as uuidv4 } from 'uuid';
+import { parseChatRequest } from '@/utils/chat-request';
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
 
 const allowedTopics = ['visa types', 'application processes', 'common faqs', 'immigration', 'visa', 'application', 'faq', 'immigration'];
 
 export async function POST(request: Request) {
+  let body: unknown;
   try {
-    const { messages, botType } = await request.json();
-    const userMessage = messages[messages.length - 1].parts[0].text;
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: 'Request body must be valid JSON.', errorId: uuidv4() }, { status: 400 });
+  }
+
+  const parsed = parseChatRequest(body);
+  if (!parsed.ok) {
+    return NextResponse.json({ error: parsed.error, errorId: uuidv4() }, { status: 400 });
+  }
+
+  try {
+    const { messages, userMessage } = parsed;
 
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 

@@ -1,5 +1,7 @@
 # AI Immigration Assistant
 
+[![CI](https://github.com/vineetsgr07/AI-Immigration-Assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/vineetsgr07/AI-Immigration-Assistant/actions/workflows/ci.yml)
+
 An intelligent chatbot designed to simplify the Canadian immigration process by providing accurate and up-to-date information.
 
 **Who it's for:** people planning to move to Canada (students, workers, families) who want quick, plain-language answers about visa types, application steps and life in Canada before they read the official guides or talk to a licensed consultant.

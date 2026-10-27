@@ -2,6 +2,8 @@
 
 An intelligent chatbot designed to simplify the Canadian immigration process by providing accurate and up-to-date information.
 
+**Who it's for:** people planning to move to Canada (students, workers, families) who want quick, plain-language answers about visa types, application steps and life in Canada before they read the official guides or talk to a licensed consultant.
+
 | Login Page | Landing Page |
 |------------|--------------|
 | ![AI Immigration Assistant Screenshot](./images/login.png) | ![AI Immigration Assistant Screenshot](./images/screenshot.png) |
@@ -47,22 +49,27 @@ The application supports customizable themes for a personalized user experience.
 - TypeScript
 - Tailwind CSS
 - Google Gemini AI API
+- NextAuth (Google sign-in)
+- Jest + React Testing Library
 
 ## Getting Started
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/vineetsgr07/ai-immigration-assistant.git
+   git clone https://github.com/vineetsgr07/AI-Immigration-Assistant.git
+   cd AI-Immigration-Assistant
+   ```
 
 2. Install dependencies:
    ```bash
    npm install
    ```
 
-3. Create a `.env` file in the root directory and add the following:
+3. Copy the example env file and fill in your own keys:
    ```bash
-   NEXT_PUBLIC_GEMINI_API_KEY=<your-gemini-api-key>
+   cp .env.example .env.local
    ```
+   You need a Gemini API key (`GOOGLE_API_KEY`), a Google OAuth client (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`) and a `NEXTAUTH_SECRET`.
 
 4. Start the development server:
    ```bash
@@ -81,6 +88,27 @@ npm test
 ## Deployment
 
 The application is deployed on Vercel.
+
+## Data and privacy
+
+- No database. Sign-in uses a Google account through NextAuth; the session lives in a signed cookie.
+- Chat history is saved only in the user's own browser (`localStorage`) and can be cleared there.
+- Each question is sent to the Google Gemini API to generate the answer.
+
+## Roadmap
+
+Planned work, roughly in order:
+
+- [ ] Move from the retired `gemini-pro` model and `@google/generative-ai` to a current Gemini model and the `@google/genai` SDK.
+- [ ] Stream answers token by token instead of waiting for the full reply.
+- [ ] Ground answers in official IRCC pages and show the source links under each answer.
+- [ ] Replace the keyword topic filter in `api/chat` with a proper topic check and a clear "out of scope" reply.
+- [ ] Add a CRS (Express Entry) score estimator as a guided chat flow.
+- [ ] French and other languages (multilingual support).
+- [ ] Clear and export chat history from the UI.
+- [ ] Rate limiting on `/api/chat`.
+- [ ] Upgrade to the current Next.js and Auth.js versions.
+- [ ] Tests for the chat API route, `ChatContext` and voice input; accessibility pass on the chat screen.
 
 ## Contributing
 
